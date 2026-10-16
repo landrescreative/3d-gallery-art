@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback, useEffect } from 'react'
 import { ARTWORKS, SCULPTURES } from './data/artworks'
 import { Artwork, Sculpture, LightingMode, GraphicsQuality } from './types/gallery'
 import { VisualConfig } from './types/visualSettings'
-import { DEFAULT_VISUAL_CONFIG, PRESET_NOCHE, PRESET_GALERIA } from './data/visualPresets'
+import { DEFAULT_VISUAL_CONFIG, PRESET_NOCHE, PRESET_GALERIA, LIGHTING_CONFIGS } from './data/visualPresets'
 import { GalleryScene } from './components/3d/GalleryScene'
 import { TopNav } from './components/ui/TopNav'
 import { HUD } from './components/ui/HUD'
@@ -57,6 +57,20 @@ export const App: React.FC = () => {
 
   const handleVisualConfigChange = useCallback((newConfig: VisualConfig) => {
     setVisualConfig(newConfig)
+    const presetModeMap: Record<string, LightingMode> = {
+      galeria: 'gallery',
+      mediodia: 'noon',
+      atardecer: 'warm',
+      noche: 'night',
+      ciudad: 'city',
+      cyberpunk: 'cyberpunk',
+      nordico: 'nordic',
+      dramatico: 'dramatic',
+      estudio: 'studio'
+    }
+    if (newConfig.activePreset && presetModeMap[newConfig.activePreset]) {
+      setLightingMode(presetModeMap[newConfig.activePreset])
+    }
     try {
       localStorage.setItem('gallery_visual_debug_config', JSON.stringify(newConfig))
     } catch {}
@@ -64,6 +78,7 @@ export const App: React.FC = () => {
 
   const handleVisualConfigReset = useCallback(() => {
     setVisualConfig(DEFAULT_VISUAL_CONFIG)
+    setLightingMode('gallery')
     try {
       localStorage.removeItem('gallery_visual_debug_config')
     } catch {}
@@ -72,12 +87,21 @@ export const App: React.FC = () => {
   // Sync lightingMode toggle with visualConfig presets
   const handleLightingChange = useCallback((mode: LightingMode) => {
     setLightingMode(mode)
-    if (mode === 'dramatic' || mode === 'night') {
-      handleVisualConfigChange(PRESET_NOCHE)
-    } else if (mode === 'gallery') {
-      handleVisualConfigChange(PRESET_GALERIA)
+    const targetConfig = LIGHTING_CONFIGS[mode]
+    if (targetConfig) {
+      let configToApply = targetConfig
+      if (isMobileDevice && configToApply.hdriPath === '/textures/park_scenic_4k.hdr') {
+        configToApply = {
+          ...configToApply,
+          hdriPath: '/textures/park_scenic_2k.hdr'
+        }
+      }
+      setVisualConfig(configToApply)
+      try {
+        localStorage.setItem('gallery_visual_debug_config', JSON.stringify(configToApply))
+      } catch {}
     }
-  }, [handleVisualConfigChange])
+  }, [])
 
   // Graphics Quality Preset: mobile strictly defaults to 'bajo' for maximum performance
   const [graphicsQuality, setGraphicsQuality] = useState<GraphicsQuality>(() => {

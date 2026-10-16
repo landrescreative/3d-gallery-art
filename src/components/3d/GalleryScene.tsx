@@ -75,79 +75,136 @@ export const GalleryScene: React.FC<GallerySceneProps> = ({
     switch (lightingMode) {
       case 'noon':
         return {
-          ambientIntensity: 0.46,
-          ambientColor: '#ede8e1',
-          hemiSky: '#fffdfa',
-          hemiGround: '#d8cebe',
-          hemiIntensity: 0.40,
-          sunIntensity: 2.30,
+          ambientIntensity: 0.48,
+          ambientColor: '#e0f2fe',
+          hemiSky: '#bae6fd',
+          hemiGround: '#94a3b8',
+          hemiIntensity: 0.45,
+          sunIntensity: 3.20,
           sunColor: '#fffdf5',
-          sunPos: [3, 17, 2] as [number, number, number],
+          sunPos: [2, 24, 14] as [number, number, number],
           atriumColor: '#fffdf7',
-          graphicColor: '#fffef9',
-          uiWebColor: '#fffdf5',
-          threeDColor: '#fffdf7',
-          fogColor: '#ebe6de',
-          fogNear: 30,
-          fogFar: 90,
-          ceilingFillIntensity: 0.85
+          graphicColor: '#f8fafc',
+          uiWebColor: '#f0f9ff',
+          threeDColor: '#e0f2fe',
+          fogColor: '#e0f2fe',
+          fogNear: 55,
+          fogFar: 180,
+          ceilingFillIntensity: 0.95
         }
       case 'warm':
         return {
-          ambientIntensity: 0.38,
-          ambientColor: '#f7eee3',
+          ambientIntensity: 0.40,
+          ambientColor: '#fef3c7',
           hemiSky: '#fed7aa',
-          hemiGround: '#bfa78a',
-          hemiIntensity: 0.35,
-          sunIntensity: 2.20,
-          sunColor: '#fbbf24',
-          sunPos: [6, 14, 5] as [number, number, number],
+          hemiGround: '#7c2d12',
+          hemiIntensity: 0.38,
+          sunIntensity: 2.80,
+          sunColor: '#f59e0b',
+          sunPos: [14, 9, 24] as [number, number, number],
           atriumColor: '#fed7aa',
-          graphicColor: '#fed7aa',
-          uiWebColor: '#fef3c7',
-          threeDColor: '#fef08a',
-          fogColor: '#e8dcce',
-          fogNear: 25,
+          graphicColor: '#fef3c7',
+          uiWebColor: '#fde68a',
+          threeDColor: '#fed7aa',
+          fogColor: '#2d1508',
+          fogNear: 38,
+          fogFar: 135,
+          ceilingFillIntensity: 0.80
+        }
+      case 'city':
+        return {
+          ambientIntensity: 0.44,
+          ambientColor: '#e2e8f0',
+          hemiSky: '#cbd5e1',
+          hemiGround: '#334155',
+          hemiIntensity: 0.38,
+          sunIntensity: 2.65,
+          sunColor: '#f8fafc',
+          sunPos: [-8, 18, 22] as [number, number, number],
+          atriumColor: '#f1f5f9',
+          graphicColor: '#e2e8f0',
+          uiWebColor: '#38bdf8',
+          threeDColor: '#f8fafc',
+          fogColor: '#1e293b',
+          fogNear: 46,
+          fogFar: 145,
+          ceilingFillIntensity: 0.85
+        }
+      case 'cyberpunk':
+        return {
+          ambientIntensity: 0.14,
+          ambientColor: '#1e1035',
+          hemiSky: '#a855f7',
+          hemiGround: '#020617',
+          hemiIntensity: 0.25,
+          sunIntensity: 0.65,
+          sunColor: '#06b6d4',
+          sunPos: [-12, 14, 20] as [number, number, number],
+          atriumColor: '#a855f7',
+          graphicColor: '#f43f5e',
+          uiWebColor: '#06b6d4',
+          threeDColor: '#38bdf8',
+          fogColor: '#0c0517',
+          fogNear: 24,
           fogFar: 85,
-          ceilingFillIntensity: 0.75
+          ceilingFillIntensity: 1.10
         }
       case 'studio':
         return {
-          ambientIntensity: 0.42,
-          ambientColor: '#ede8e1',
+          ambientIntensity: 0.50,
+          ambientColor: '#ffffff',
           hemiSky: '#ffffff',
-          hemiGround: '#d5ccbd',
-          hemiIntensity: 0.38,
-          sunIntensity: 2.15,
+          hemiGround: '#cbd5e1',
+          hemiIntensity: 0.42,
+          sunIntensity: 2.40,
           sunColor: '#ffffff',
-          sunPos: [4, 16, 4] as [number, number, number],
-          atriumColor: '#ede8e1',
-          graphicColor: '#ede8e1',
-          uiWebColor: '#ede9e2',
-          threeDColor: '#eae6df',
-          fogColor: '#ebe6de',
-          fogNear: 28,
-          fogFar: 88,
-          ceilingFillIntensity: 0.80
+          sunPos: [0, 20, 20] as [number, number, number],
+          atriumColor: '#ffffff',
+          graphicColor: '#ffffff',
+          uiWebColor: '#ffffff',
+          threeDColor: '#ffffff',
+          fogColor: '#f8fafc',
+          fogNear: 50,
+          fogFar: 160,
+          ceilingFillIntensity: 0.90
         }
       case 'nordic':
         return {
-          ambientIntensity: 0.38,
-          ambientColor: '#e9ecef',
-          hemiSky: '#f1f5f9',
-          hemiGround: '#cbd5e1',
-          hemiIntensity: 0.35,
-          sunIntensity: 2.00,
+          ambientIntensity: 0.46,
+          ambientColor: '#f1f5f9',
+          hemiSky: '#f8fafc',
+          hemiGround: '#94a3b8',
+          hemiIntensity: 0.40,
+          sunIntensity: 2.10,
           sunColor: '#e2e8f0',
-          sunPos: [-5, 16, -3] as [number, number, number],
-          atriumColor: '#f1f5f9',
-          graphicColor: '#e9ecef',
-          uiWebColor: '#f1f5f9',
-          threeDColor: '#e2e8f0',
+          sunPos: [3, 19, 24] as [number, number, number],
+          atriumColor: '#f8fafc',
+          graphicColor: '#f1f5f9',
+          uiWebColor: '#e2e8f0',
+          threeDColor: '#f1f5f9',
           fogColor: '#e2e8f0',
-          fogNear: 26,
-          fogFar: 82,
-          ceilingFillIntensity: 0.75
+          fogNear: 48,
+          fogFar: 145,
+          ceilingFillIntensity: 0.78
+        }
+      case 'dramatic':
+        return {
+          ambientIntensity: 0.05,
+          ambientColor: '#0a0a0c',
+          hemiSky: '#18181b',
+          hemiGround: '#030303',
+          hemiIntensity: 0.08,
+          sunIntensity: 2.90,
+          sunColor: '#fef08a',
+          sunPos: [8, 14, 18] as [number, number, number],
+          atriumColor: '#fbbf24',
+          graphicColor: '#f59e0b',
+          uiWebColor: '#93c5fd',
+          threeDColor: '#fde047',
+          fogColor: '#050507',
+          fogNear: 22,
+          fogFar: 75,
+          ceilingFillIntensity: 0.45
         }
       case 'gallery':
         return {
@@ -156,7 +213,7 @@ export const GalleryScene: React.FC<GallerySceneProps> = ({
           hemiSky: '#f8fafc',
           hemiGround: '#cbd5e1',
           hemiIntensity: 0.42,
-          sunIntensity: 2.50,
+          sunIntensity: 2.70,
           sunColor: '#ffffff',
           sunPos: [4, 16, 26] as [number, number, number],
           atriumColor: '#ffffff',
@@ -164,20 +221,95 @@ export const GalleryScene: React.FC<GallerySceneProps> = ({
           uiWebColor: '#ffffff',
           threeDColor: '#ffffff',
           fogColor: '#f1f5f9',
-          fogNear: 45,
-          fogFar: 140,
+          fogNear: 50,
+          fogFar: 160,
           ceilingFillIntensity: 0.85
         }
+      case 'sunset_crimson':
+        return {
+          ambientIntensity: 0.35,
+          ambientColor: '#2e1065',
+          hemiSky: '#db2777',
+          hemiGround: '#4c0519',
+          hemiIntensity: 0.35,
+          sunIntensity: 2.90,
+          sunColor: '#f43f5e',
+          sunPos: [16, 7, 22] as [number, number, number],
+          atriumColor: '#f43f5e',
+          graphicColor: '#fb7185',
+          uiWebColor: '#ec4899',
+          threeDColor: '#e11d48',
+          fogColor: '#1e0521',
+          fogNear: 35,
+          fogFar: 125,
+          ceilingFillIntensity: 0.82
+        }
+      case 'aurora':
+        return {
+          ambientIntensity: 0.12,
+          ambientColor: '#022c22',
+          hemiSky: '#10b981',
+          hemiGround: '#021c17',
+          hemiIntensity: 0.28,
+          sunIntensity: 0.45,
+          sunColor: '#38bdf8',
+          sunPos: [5, 18, -20] as [number, number, number],
+          atriumColor: '#10b981',
+          graphicColor: '#2dd4bf',
+          uiWebColor: '#06b6d4',
+          threeDColor: '#34d399',
+          fogColor: '#021814',
+          fogNear: 25,
+          fogFar: 90,
+          ceilingFillIntensity: 0.55
+        }
+      case 'autumn':
+        return {
+          ambientIntensity: 0.42,
+          ambientColor: '#fef3c7',
+          hemiSky: '#fed7aa',
+          hemiGround: '#78350f',
+          hemiIntensity: 0.40,
+          sunIntensity: 2.85,
+          sunColor: '#f59e0b',
+          sunPos: [10, 14, 20] as [number, number, number],
+          atriumColor: '#fed7aa',
+          graphicColor: '#f59e0b',
+          uiWebColor: '#fbbf24',
+          threeDColor: '#d97706',
+          fogColor: '#2e1406',
+          fogNear: 42,
+          fogFar: 140,
+          ceilingFillIntensity: 0.88
+        }
+      case 'noir':
+        return {
+          ambientIntensity: 0.08,
+          ambientColor: '#000000',
+          hemiSky: '#f8fafc',
+          hemiGround: '#000000',
+          hemiIntensity: 0.18,
+          sunIntensity: 3.10,
+          sunColor: '#ffffff',
+          sunPos: [-6, 22, 18] as [number, number, number],
+          atriumColor: '#ffffff',
+          graphicColor: '#ffffff',
+          uiWebColor: '#ffffff',
+          threeDColor: '#ffffff',
+          fogColor: '#09090b',
+          fogNear: 35,
+          fogFar: 110,
+          ceilingFillIntensity: 0.70
+        }
       case 'night':
-      case 'dramatic':
       default:
         return {
-          ambientIntensity: 0.05,
+          ambientIntensity: 0.06,
           ambientColor: '#090d16',
           hemiSky: '#1e293b',
           hemiGround: '#020617',
-          hemiIntensity: 0.08,
-          sunIntensity: 0.25,
+          hemiIntensity: 0.09,
+          sunIntensity: 0.30,
           sunColor: '#93c5fd', // Soft cool lunar silver-blue
           sunPos: [4, 16, -18] as [number, number, number], // Moon positioned above the outdoor scenic courtyard
           atriumColor: '#fff1d6', // Warm glowing interior museum fixtures
@@ -321,7 +453,7 @@ export const GalleryScene: React.FC<GallerySceneProps> = ({
           intensity={lighting.ceilingFillIntensity * 1.3 * (visualConfig?.fillIntensity ?? 1.0)}
           distance={20}
           decay={2}
-          color={lighting.atriumColor}
+          color={visualConfig?.atriumColor ?? lighting.atriumColor}
         />
 
         {/* 2. Galería de Diseño Gráfico & Foto (West) */}
@@ -330,7 +462,7 @@ export const GalleryScene: React.FC<GallerySceneProps> = ({
           intensity={lighting.ceilingFillIntensity * 1.2 * (visualConfig?.fillIntensity ?? 1.0)}
           distance={18}
           decay={2}
-          color={lighting.graphicColor}
+          color={visualConfig?.graphicColor ?? lighting.graphicColor}
         />
 
         {/* 3. Pabellón UI/UX, Web & Plataformas (East) */}
@@ -339,7 +471,7 @@ export const GalleryScene: React.FC<GallerySceneProps> = ({
           intensity={lighting.ceilingFillIntensity * 1.2 * (visualConfig?.fillIntensity ?? 1.0)}
           distance={18}
           decay={2}
-          color={lighting.uiWebColor}
+          color={visualConfig?.uiWebColor ?? lighting.uiWebColor}
         />
 
         {/* 4. Sala 3D, CGI & Escultura (North) */}
@@ -348,7 +480,7 @@ export const GalleryScene: React.FC<GallerySceneProps> = ({
           intensity={lighting.ceilingFillIntensity * 1.3 * (visualConfig?.fillIntensity ?? 1.0)}
           distance={20}
           decay={2}
-          color={lighting.threeDColor}
+          color={visualConfig?.threeDColor ?? lighting.threeDColor}
         />
 
         {/* Architecture with Themed Materials */}

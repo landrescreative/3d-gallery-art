@@ -178,6 +178,212 @@ html, body, #root {
   -webkit-backdrop-filter: blur(12px);
 }
 
+.lighting-dropdown-container {
+  position: relative;
+  display: inline-flex;
+}
+
+.lighting-selector-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-panel);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all var(--transition-fast);
+}
+
+.lighting-selector-btn:hover {
+  background: var(--bg-hover);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.lighting-selector-btn.active {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.lighting-btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #facc15;
+}
+
+.lighting-chevron {
+  transition: transform var(--transition-fast);
+  color: var(--text-muted);
+}
+
+.lighting-chevron.open {
+  transform: rotate(180deg);
+}
+
+.lighting-menu-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 295px;
+  background: rgba(12, 13, 16, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.75), 0 0 1px rgba(255, 255, 255, 0.2);
+  padding: 8px;
+  z-index: 99999;
+  animation: lightingMenuFadeIn 0.16s ease-out;
+}
+
+@keyframes lightingMenuFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.lighting-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 6px;
+}
+
+.lighting-menu-title {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.lighting-menu-count {
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+}
+
+.lighting-menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-height: 380px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.lighting-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 9px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-main);
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.lighting-menu-item:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.lighting-menu-item.active {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.lighting-item-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #facc15;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.lighting-menu-item.active .lighting-item-icon {
+  background: rgba(250, 204, 21, 0.2);
+  color: #fde047;
+}
+
+.lighting-item-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lighting-item-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.lighting-item-name {
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.lighting-item-badge {
+  font-family: var(--font-sans);
+  font-size: 0.58rem;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 1px 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.lighting-item-sub {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lighting-item-check {
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding-left: 2px;
+}
+
 .lighting-tier-btn,
 .graphics-tier-btn {
   display: flex;
@@ -1063,6 +1269,18 @@ html, body, #root {
     font-size: 0.58rem;
     gap: 2px;
     border-radius: 9999px;
+  }
+
+  .lighting-selector-btn {
+    padding: 3px 8px;
+    font-size: 0.58rem;
+    gap: 4px;
+    border-radius: 9999px;
+  }
+
+  .lighting-menu-dropdown {
+    width: min(290px, 86vw);
+    right: -20px;
   }
 
   .nav-icon-btn {

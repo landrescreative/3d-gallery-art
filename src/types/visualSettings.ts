@@ -1,5 +1,21 @@
+export type PresetKey =
+  | 'galeria'
+  | 'mediodia'
+  | 'atardecer'
+  | 'noche'
+  | 'ciudad'
+  | 'nordico'
+  | 'dramatico'
+  | 'cyberpunk'
+  | 'estudio'
+  | 'crepusculo'
+  | 'aurora'
+  | 'otono'
+  | 'noir'
+  | 'personalizado'
+
 export interface VisualConfig {
-  activePreset: 'noche' | 'galeria' | 'atardecer' | 'ciudad' | 'nordico' | 'personalizado'
+  activePreset: PresetKey | string
 
   // HDRI & Entorno
   hdriPath: string
@@ -29,6 +45,10 @@ export interface VisualConfig {
   fillIntensity: number
   skylight3DIntensity: number
   roomLightColor: string
+  atriumColor?: string
+  graphicColor?: string
+  uiWebColor?: string
+  threeDColor?: string
 
   // Atmósfera & Niebla
   fogEnabled: boolean

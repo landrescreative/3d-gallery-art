@@ -1,4 +1,4 @@
-export type LightingMode = 'gallery' | 'noon' | 'warm' | 'studio' | 'nordic' | 'dramatic' | 'cyberpunk' | 'night'
+export type LightingMode = 'gallery' | 'noon' | 'warm' | 'studio' | 'nordic' | 'dramatic' | 'cyberpunk' | 'night' | 'city' | 'sunset_crimson' | 'aurora' | 'autumn' | 'noir'
 export type GraphicsQuality = 'bajo' | 'medio' | 'alto'
 
 export interface Artwork {

@@ -5,6 +5,7 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
 import { LightingMode, GraphicsQuality } from '../../types/gallery'
 import { VisualConfig } from '../../types/visualSettings'
+import { LIGHTING_CONFIGS } from '../../data/visualPresets'
 
 interface GalleryEnvironmentProps {
   lightingMode?: LightingMode
@@ -22,7 +23,7 @@ const hdrTextureCache = new Map<string, THREE.DataTexture>()
  * Fully reactive to real-time debug controls: HDRI selection, rotation, intensity, blur, and exposure.
  */
 export const GalleryEnvironment: React.FC<GalleryEnvironmentProps> = ({
-  lightingMode = 'dramatic',
+  lightingMode = 'gallery',
   visualConfig,
   graphicsQuality = 'medio'
 }) => {
@@ -35,30 +36,22 @@ export const GalleryEnvironment: React.FC<GalleryEnvironmentProps> = ({
     /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
   )
 
-  const isNight = lightingMode === 'night' || lightingMode === 'dramatic'
+  const isNight = lightingMode === 'night' || lightingMode === 'dramatic' || lightingMode === 'cyberpunk'
 
-  // Dynamic HDRI selection: night mode uses authentic starry sky (dikhololo_night_1k.hdr),
-  // day mode uses scenic daylight park (park_scenic_2k / 4k)
   const defaultDayHdri = (isMobile || graphicsQuality === 'bajo')
     ? '/textures/park_scenic_2k.hdr'
     : '/textures/park_scenic_4k.hdr'
 
-  let hdriPath: string
-  if (isNight) {
-    hdriPath = '/textures/dikhololo_night_1k.hdr'
-  } else {
-    hdriPath = visualConfig?.hdriPath && !visualConfig.hdriPath.includes('dikhololo')
-      ? visualConfig.hdriPath
-      : defaultDayHdri
-  }
+  // Dynamic HDRI selection: visualConfig takes precedence, then lightingMode preset, then defaultDayHdri
+  let hdriPath = visualConfig?.hdriPath || (lightingMode && LIGHTING_CONFIGS[lightingMode]?.hdriPath) || defaultDayHdri
 
   // Guardrail for Mobile / Low-spec VRAM:
   if ((isMobile || graphicsQuality === 'bajo') && hdriPath.includes('_4k.hdr')) {
     hdriPath = '/textures/park_scenic_2k.hdr'
   }
 
-  const defaultHdriIntensity = isNight ? 0.48 : 0.68
-  const defaultBackgroundIntensity = isNight ? 1.35 : 1.0
+  const defaultHdriIntensity = isNight ? 0.35 : 0.70
+  const defaultBackgroundIntensity = isNight ? 1.25 : 1.0
   const defaultRotationY = isNight ? 190 : 153
 
   const hdriIntensity = visualConfig?.hdriIntensity ?? defaultHdriIntensity

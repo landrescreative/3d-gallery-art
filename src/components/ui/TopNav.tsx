@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
   Sparkles,
   Moon,
@@ -11,11 +11,23 @@ import {
   ArrowLeft,
   Activity,
   Sun,
+  SunMedium,
+  Sunset,
+  Building,
+  Cloud,
+  Eye,
+  Camera,
+  ChevronDown,
+  Check,
   Sliders,
   Maximize,
-  Minimize
+  Minimize,
+  Flame,
+  Leaf,
+  Contrast
 } from 'lucide-react'
 import { Artwork, Sculpture, LightingMode, GraphicsQuality } from '../../types/gallery'
+import { LIGHTING_MODES_INFO } from '../../data/visualPresets'
 import { audioManager } from '../../utils/audio'
 
 interface TopNavProps {
@@ -52,6 +64,27 @@ export const TopNav: React.FC<TopNavProps> = ({
   const [isPlayingSoundscape, setIsPlayingSoundscape] = useState(() => audioManager.getIsPlaying())
   const [showHighQualityWarning, setShowHighQualityWarning] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [isLightingMenuOpen, setIsLightingMenuOpen] = useState(false)
+  const lightingMenuRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (lightingMenuRef.current && !lightingMenuRef.current.contains(e.target as Node)) {
+        setIsLightingMenuOpen(false)
+      }
+    }
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsLightingMenuOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [])
 
   useEffect(() => {
     return audioManager.subscribe((playing) => {
@@ -163,37 +196,106 @@ export const TopNav: React.FC<TopNavProps> = ({
 
       {/* Right Controls: Lighting, Audio, About */}
       <div className="nav-right">
-        {/* Selector Modo Día / Modo Noche */}
+        {/* Selector de Modo de Iluminación Multi-Setup */}
         {(() => {
-          const isNight = lightingMode === 'night' || lightingMode === 'dramatic'
+          const renderLightingIcon = (mode: LightingMode, size = 13) => {
+            switch (mode) {
+              case 'gallery':
+                return <Sun size={size} />
+              case 'noon':
+                return <SunMedium size={size} />
+              case 'warm':
+                return <Sunset size={size} />
+              case 'night':
+                return <Moon size={size} />
+              case 'city':
+                return <Building size={size} />
+              case 'cyberpunk':
+                return <Zap size={size} />
+              case 'nordic':
+                return <Cloud size={size} />
+              case 'dramatic':
+                return <Eye size={size} />
+              case 'studio':
+                return <Camera size={size} />
+              case 'sunset_crimson':
+                return <Flame size={size} />
+              case 'aurora':
+                return <Sparkles size={size} />
+              case 'autumn':
+                return <Leaf size={size} />
+              case 'noir':
+                return <Contrast size={size} />
+              default:
+                return <Sun size={size} />
+            }
+          }
+
+          const currentModeInfo = LIGHTING_MODES_INFO.find((m) => m.id === lightingMode)
+
           return (
-            <div className="lighting-group" title="Modo de Iluminación">
+            <div className="lighting-dropdown-container" ref={lightingMenuRef}>
               <button
-                className={`lighting-tier-btn ${!isNight ? 'active' : ''}`}
+                className={`lighting-selector-btn ${isLightingMenuOpen ? 'active' : ''}`}
                 onClick={(e) => {
                   e.stopPropagation()
-                  onLightingChange('gallery')
+                  setIsLightingMenuOpen((prev) => !prev)
                 }}
                 onMouseDown={(e) => e.stopPropagation()}
-                title="Modo Día · Iluminación Natural de Galería"
-                aria-label="Modo Día"
+                title="Seleccionar Modo de Iluminación & Entorno HDRI"
+                aria-label="Modo de Iluminación"
+                aria-expanded={isLightingMenuOpen}
               >
-                <Sun size={12} />
-                <span className="tier-label">Día</span>
+                <span className="lighting-btn-icon">{renderLightingIcon(lightingMode, 13)}</span>
+                <span className="tier-label">{currentModeInfo?.shortLabel || 'Luz'}</span>
+                <ChevronDown size={11} className={`lighting-chevron ${isLightingMenuOpen ? 'open' : ''}`} />
               </button>
-              <button
-                className={`lighting-tier-btn ${isNight ? 'active' : ''}`}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  onLightingChange('night')
-                }}
-                onMouseDown={(e) => e.stopPropagation()}
-                title="Modo Noche · Iluminación Nocturna Íntima"
-                aria-label="Modo Noche"
-              >
-                <Moon size={12} />
-                <span className="tier-label">Noche</span>
-              </button>
+
+              {isLightingMenuOpen && (
+                <div
+                  className="lighting-menu-dropdown"
+                  onClick={(e) => e.stopPropagation()}
+                  onMouseDown={(e) => e.stopPropagation()}
+                >
+                  <div className="lighting-menu-header">
+                    <span className="lighting-menu-title">Atmósfera & Iluminación</span>
+                    <span className="lighting-menu-count">{LIGHTING_MODES_INFO.length} Presets</span>
+                  </div>
+                  <div className="lighting-menu-list">
+                    {LIGHTING_MODES_INFO.map((item) => {
+                      const isSelected = item.id === lightingMode
+                      return (
+                        <button
+                          key={item.id}
+                          className={`lighting-menu-item ${isSelected ? 'active' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            onLightingChange(item.id)
+                            setIsLightingMenuOpen(false)
+                          }}
+                          onMouseDown={(e) => e.stopPropagation()}
+                        >
+                          <div className="lighting-item-icon">
+                            {renderLightingIcon(item.id, 15)}
+                          </div>
+                          <div className="lighting-item-info">
+                            <div className="lighting-item-title-row">
+                              <span className="lighting-item-name">{item.label}</span>
+                              <span className="lighting-item-badge">{item.hdriName}</span>
+                            </div>
+                            <span className="lighting-item-sub">{item.subtitle}</span>
+                          </div>
+                          {isSelected && (
+                            <div className="lighting-item-check">
+                              <Check size={14} />
+                            </div>
+                          )}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           )
         })()}

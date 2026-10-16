@@ -2,7 +2,12 @@ import React, { useState, useCallback, useEffect } from 'react'
 import {
   Sliders,
   Sun,
+  SunMedium,
+  Sunset,
   Moon,
+  Building,
+  Zap,
+  Cloud,
   Copy,
   Check,
   RotateCcw,
@@ -15,7 +20,10 @@ import {
   CloudSun,
   Camera,
   Compass,
-  Palette
+  Palette,
+  Flame,
+  Leaf,
+  Contrast
 } from 'lucide-react'
 import { VisualConfig } from '../../types/visualSettings'
 import {
@@ -162,11 +170,19 @@ export const VisualDebugPanel: React.FC<VisualDebugPanelProps> = ({
               onChange={(e) => handleApplyPreset(e.target.value)}
               className="debug-select compact"
             >
-              <option value="noche">Noche Minimalista</option>
               <option value="galeria">Galería Luminosa</option>
+              <option value="mediodia">Mediodía Radiante</option>
               <option value="atardecer">Atardecer Dorado</option>
+              <option value="noche">Noche Minimalista</option>
               <option value="ciudad">Ciudad Moderna</option>
+              <option value="cyberpunk">Cyberpunk Neón</option>
               <option value="nordico">Estudio Nórdico</option>
+              <option value="dramatico">Claroscuro Teatral</option>
+              <option value="estudio">Estudio PBR Neutral</option>
+              <option value="crepusculo">Crepúsculo Carmesí</option>
+              <option value="aurora">Aurora Boreal</option>
+              <option value="otono">Otoño Dorado</option>
+              <option value="noir">Galería Noir</option>
               {config.activePreset === 'personalizado' && (
                 <option value="personalizado">Personalizado</option>
               )}
@@ -277,19 +293,6 @@ export const VisualDebugPanel: React.FC<VisualDebugPanelProps> = ({
 
                 <div className="presets-grid">
                   <button
-                    className={`preset-card ${config.activePreset === 'noche' ? 'active' : ''}`}
-                    onClick={() => handleApplyPreset('noche')}
-                  >
-                    <div className="preset-card-header">
-                      <Moon size={16} />
-                      <span className="preset-name">Noche Minimalista</span>
-                    </div>
-                    <span className="preset-desc">
-                      Cielo estrellado, luna sutil, iluminación arquitectónica tenue y elegante.
-                    </span>
-                  </button>
-
-                  <button
                     className={`preset-card ${config.activePreset === 'galeria' ? 'active' : ''}`}
                     onClick={() => handleApplyPreset('galeria')}
                   >
@@ -298,7 +301,20 @@ export const VisualDebugPanel: React.FC<VisualDebugPanelProps> = ({
                       <span className="preset-name">Galería Luminosa</span>
                     </div>
                     <span className="preset-desc">
-                      Luz natural radiante, vista al parque, tonos blancos neutros de museo.
+                      Luz natural radiante, vista al parque, tonos blancos neutros de museo (HDRI Parque 4K).
+                    </span>
+                  </button>
+
+                  <button
+                    className={`preset-card ${config.activePreset === 'mediodia' ? 'active' : ''}`}
+                    onClick={() => handleApplyPreset('mediodia')}
+                  >
+                    <div className="preset-card-header">
+                      <SunMedium size={16} />
+                      <span className="preset-name">Mediodía Radiante</span>
+                    </div>
+                    <span className="preset-desc">
+                      Cielo abierto azul, sol cenital de alto impacto y sombras recortadas (HDRI Clear Sky 4K).
                     </span>
                   </button>
 
@@ -307,11 +323,24 @@ export const VisualDebugPanel: React.FC<VisualDebugPanelProps> = ({
                     onClick={() => handleApplyPreset('atardecer')}
                   >
                     <div className="preset-card-header">
-                      <CloudSun size={16} />
+                      <Sunset size={16} />
                       <span className="preset-name">Atardecer Dorado</span>
                     </div>
                     <span className="preset-desc">
-                      Golden hour cálido, sol rasante ambarino y reflejos dorados en el piso.
+                      Golden hour cálido, sol rasante ambarino y destellos dorados en el piso (HDRI Amanecer).
+                    </span>
+                  </button>
+
+                  <button
+                    className={`preset-card ${config.activePreset === 'noche' ? 'active' : ''}`}
+                    onClick={() => handleApplyPreset('noche')}
+                  >
+                    <div className="preset-card-header">
+                      <Moon size={16} />
+                      <span className="preset-name">Noche Minimalista</span>
+                    </div>
+                    <span className="preset-desc">
+                      Cielo estrellado, luna sutil, iluminación arquitectónica tenue y elegante (HDRI Noche).
                     </span>
                   </button>
 
@@ -320,11 +349,24 @@ export const VisualDebugPanel: React.FC<VisualDebugPanelProps> = ({
                     onClick={() => handleApplyPreset('ciudad')}
                   >
                     <div className="preset-card-header">
-                      <Compass size={16} />
+                      <Building size={16} />
                       <span className="preset-name">Ciudad Moderna</span>
                     </div>
                     <span className="preset-desc">
-                      Vista urbana a rascacielos y atmósfera contemporánea refinada.
+                      Vista urbana a rascacielos contemporáneos y reflejos arquitectónicos (HDRI Edificios).
+                    </span>
+                  </button>
+
+                  <button
+                    className={`preset-card ${config.activePreset === 'cyberpunk' ? 'active' : ''}`}
+                    onClick={() => handleApplyPreset('cyberpunk')}
+                  >
+                    <div className="preset-card-header">
+                      <Zap size={16} />
+                      <span className="preset-name">Cyberpunk Neón</span>
+                    </div>
+                    <span className="preset-desc">
+                      Estética synthwave nocturna con luces perimetrales cian y magenta (HDRI Urbano).
                     </span>
                   </button>
 
@@ -333,11 +375,89 @@ export const VisualDebugPanel: React.FC<VisualDebugPanelProps> = ({
                     onClick={() => handleApplyPreset('nordico')}
                   >
                     <div className="preset-card-header">
-                      <Sparkles size={16} />
+                      <Cloud size={16} />
                       <span className="preset-name">Estudio Nórdico</span>
                     </div>
                     <span className="preset-desc">
                       Tonos fríos desaturados, blanco suave, contraste nítido y balance escandinavo.
+                    </span>
+                  </button>
+
+                  <button
+                    className={`preset-card ${config.activePreset === 'dramatico' ? 'active' : ''}`}
+                    onClick={() => handleApplyPreset('dramatico')}
+                  >
+                    <div className="preset-card-header">
+                      <Eye size={16} />
+                      <span className="preset-name">Claroscuro Teatral</span>
+                    </div>
+                    <span className="preset-desc">
+                      Iluminación focal directa en obras con sombras profundas y dramatismo museístico.
+                    </span>
+                  </button>
+
+                  <button
+                    className={`preset-card ${config.activePreset === 'estudio' ? 'active' : ''}`}
+                    onClick={() => handleApplyPreset('estudio')}
+                  >
+                    <div className="preset-card-header">
+                      <Camera size={16} />
+                      <span className="preset-name">Estudio PBR Neutral</span>
+                    </div>
+                    <span className="preset-desc">
+                      Luz fotográfica blanca pura 5500K sin sesgo de color para máxima fidelidad material.
+                    </span>
+                  </button>
+
+                  <button
+                    className={`preset-card ${config.activePreset === 'crepusculo' ? 'active' : ''}`}
+                    onClick={() => handleApplyPreset('crepusculo')}
+                  >
+                    <div className="preset-card-header">
+                      <Flame size={16} />
+                      <span className="preset-name">Crepúsculo Carmesí</span>
+                    </div>
+                    <span className="preset-desc">
+                      Atardecer veneciano profundo con sol carmesí bajo, sombras rasantes y reflejos púrpuras.
+                    </span>
+                  </button>
+
+                  <button
+                    className={`preset-card ${config.activePreset === 'aurora' ? 'active' : ''}`}
+                    onClick={() => handleApplyPreset('aurora')}
+                  >
+                    <div className="preset-card-header">
+                      <Sparkles size={16} />
+                      <span className="preset-name">Aurora Boreal</span>
+                    </div>
+                    <span className="preset-desc">
+                      Noche ártica mística con bioluminiscencia esmeralda y cian sobre cielo estrellado.
+                    </span>
+                  </button>
+
+                  <button
+                    className={`preset-card ${config.activePreset === 'otono' ? 'active' : ''}`}
+                    onClick={() => handleApplyPreset('otono')}
+                  >
+                    <div className="preset-card-header">
+                      <Leaf size={16} />
+                      <span className="preset-name">Otoño Dorado</span>
+                    </div>
+                    <span className="preset-desc">
+                      Cálida atmósfera otoñal con sol ámbar, bruma rústica y follaje dorado en el horizonte.
+                    </span>
+                  </button>
+
+                  <button
+                    className={`preset-card ${config.activePreset === 'noir' ? 'active' : ''}`}
+                    onClick={() => handleApplyPreset('noir')}
+                  >
+                    <div className="preset-card-header">
+                      <Contrast size={16} />
+                      <span className="preset-name">Galería Noir</span>
+                    </div>
+                    <span className="preset-desc">
+                      Estudio fotográfico blanco y negro monocromático de alto contraste con luces recortadas.
                     </span>
                   </button>
                 </div>
