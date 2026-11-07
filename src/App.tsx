@@ -21,7 +21,7 @@ const isMobileDevice = typeof window !== 'undefined' && (
 export const App: React.FC = () => {
   const [nearestItem, setNearestItem] = useState<Artwork | Sculpture | null>(null)
   const [selectedItem, setSelectedItem] = useState<Artwork | Sculpture | null>(null)
-  const [lightingMode, setLightingMode] = useState<LightingMode>('gallery')
+  const [lightingMode, setLightingMode] = useState<LightingMode>('dramatic')
   
   // Visual & Lighting Debug Configuration (persisted to localStorage)
   const [visualConfig, setVisualConfig] = useState<VisualConfig>(() => {
@@ -29,6 +29,10 @@ export const App: React.FC = () => {
       const saved = typeof window !== 'undefined' ? localStorage.getItem('gallery_visual_debug_config') : null
       if (saved) {
         const parsed = JSON.parse(saved)
+        // If user had previous default 'galeria' or 'personalizado', migrate smoothly to default dramatic
+        if (parsed.activePreset === 'galeria') {
+          return DEFAULT_VISUAL_CONFIG
+        }
         if (isMobileDevice) {
           if (parsed.hdriPath?.includes('_4k.hdr') || parsed.hdriPath === '/textures/park_scenic_1k.hdr') {
             parsed.hdriPath = '/textures/park_scenic_2k.hdr'
@@ -47,7 +51,7 @@ export const App: React.FC = () => {
     if (isMobileDevice) {
       return {
         ...DEFAULT_VISUAL_CONFIG,
-        hdriPath: '/textures/park_scenic_2k.hdr'
+        hdriPath: '/textures/dikhololo_night_1k.hdr'
       }
     }
     return DEFAULT_VISUAL_CONFIG
@@ -78,7 +82,7 @@ export const App: React.FC = () => {
 
   const handleVisualConfigReset = useCallback(() => {
     setVisualConfig(DEFAULT_VISUAL_CONFIG)
-    setLightingMode('gallery')
+    setLightingMode('dramatic')
     try {
       localStorage.removeItem('gallery_visual_debug_config')
     } catch {}

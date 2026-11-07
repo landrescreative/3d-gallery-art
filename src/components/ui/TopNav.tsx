@@ -24,11 +24,14 @@ import {
   Minimize,
   Flame,
   Leaf,
-  Contrast
+  Contrast,
+  HelpCircle,
+  MapPin
 } from 'lucide-react'
 import { Artwork, Sculpture, LightingMode, GraphicsQuality } from '../../types/gallery'
 import { LIGHTING_MODES_INFO } from '../../data/visualPresets'
 import { audioManager } from '../../utils/audio'
+import { HelpControlsModal } from './HelpControlsModal'
 
 interface TopNavProps {
   lightingMode: LightingMode
@@ -65,6 +68,7 @@ export const TopNav: React.FC<TopNavProps> = ({
   const [showHighQualityWarning, setShowHighQualityWarning] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [isLightingMenuOpen, setIsLightingMenuOpen] = useState(false)
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false)
   const lightingMenuRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
@@ -84,6 +88,19 @@ export const TopNav: React.FC<TopNavProps> = ({
       document.removeEventListener('mousedown', handleClickOutside)
       document.removeEventListener('keydown', handleKeyDown)
     }
+  }, [])
+
+  // Global keyboard shortcut for H (Help)
+  useEffect(() => {
+    const handleGlobalShortcuts = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return
+      if (e.code === 'KeyH') {
+        setIsHelpModalOpen((prev) => !prev)
+      }
+    }
+    window.addEventListener('keydown', handleGlobalShortcuts)
+    return () => window.removeEventListener('keydown', handleGlobalShortcuts)
   }, [])
 
   useEffect(() => {
@@ -145,22 +162,32 @@ export const TopNav: React.FC<TopNavProps> = ({
   return (
     <>
       <header className="top-nav">
-      {/* Brand */}
+      {/* Brand with Museum Emblem */}
       <div className="nav-brand">
-        <h1 className="brand-title">LANDRES <span className="brand-title-ext">CREATIVE</span></h1>
-        <span className="brand-sub">Galería Virtual 3D</span>
+        <div className="brand-emblem">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2" />
+            <polyline points="2 17 12 22 22 17" />
+            <polyline points="2 12 12 17 22 12" />
+          </svg>
+        </div>
+        <div className="brand-titles-wrap">
+          <h1 className="brand-title">LANDRES <span className="brand-title-ext">CREATIVE</span></h1>
+          <span className="brand-sub">Museo Virtual 3D</span>
+        </div>
       </div>
 
       {/* Center Controls: Guided Tour */}
       <div className="nav-center">
-        <div className="tour-controls">
-          <button
-            className={`tour-btn ${isTouring ? 'active' : ''}`}
-            onClick={onToggleTour}
-          >
-            {isTouring ? <Square size={13} /> : <Play size={13} />}
-            <span>{isTouring ? 'Detener' : 'Tour Guiado'}</span>
-          </button>
+        <div className="center-action-pills">
+          <div className="tour-controls">
+            <button
+              className={`tour-btn ${isTouring ? 'active' : ''}`}
+              onClick={onToggleTour}
+            >
+              {isTouring ? <Square size={13} /> : <Play size={13} />}
+              <span>{isTouring ? 'Detener' : 'Tour Guiado'}</span>
+            </button>
 
 
           {isTouring && (
@@ -193,6 +220,7 @@ export const TopNav: React.FC<TopNavProps> = ({
           )}
         </div>
       </div>
+    </div>
 
       {/* Right Controls: Lighting, Audio, About */}
       <div className="nav-right">
@@ -347,14 +375,31 @@ export const TopNav: React.FC<TopNavProps> = ({
 
         <div className="nav-divider" />
 
-        {/* Lo-Fi Background Music */}
+        {/* Lo-Fi Background Music with Animated Visualizer */}
         <button
           className={`nav-icon-btn music-btn ${isPlayingSoundscape ? 'sound-active' : ''}`}
           onClick={toggleSoundscape}
-          title={isPlayingSoundscape ? 'Silenciar Música Lo-Fi' : 'Activar Música Lo-Fi de Fondo'}
+          title={isPlayingSoundscape ? 'Silenciar Música Lo-Fi de Fondo' : 'Activar Música Lo-Fi de Fondo'}
           aria-label="Música Lo-Fi de Fondo"
         >
-          {isPlayingSoundscape ? <Volume2 size={17} /> : <VolumeX size={17} />}
+          {isPlayingSoundscape ? <Volume2 size={16} /> : <VolumeX size={16} />}
+          {isPlayingSoundscape && (
+            <span className="sound-bars-indicator" aria-hidden="true">
+              <span className="sound-bar b1" />
+              <span className="sound-bar b2" />
+              <span className="sound-bar b3" />
+            </span>
+          )}
+        </button>
+
+        {/* Guía de Ayuda & Controles */}
+        <button
+          className={`nav-icon-btn help-btn ${isHelpModalOpen ? 'sound-active' : ''}`}
+          onClick={() => setIsHelpModalOpen(true)}
+          title="Guía de Navegación & Controles [Tecla H]"
+          aria-label="Guía de Navegación"
+        >
+          <HelpCircle size={16} />
         </button>
 
         {/* Pantalla Completa */}
@@ -366,7 +411,6 @@ export const TopNav: React.FC<TopNavProps> = ({
         >
           {isFullscreen ? <Minimize size={16} /> : <Maximize size={16} />}
         </button>
-
 
         {/* Visual Calibration Debug Panel Toggle */}
         {onToggleDebugPanel && (
@@ -381,6 +425,12 @@ export const TopNav: React.FC<TopNavProps> = ({
         )}
       </div>
     </header>
+
+    {/* Help & Controls Modal */}
+    <HelpControlsModal
+      isOpen={isHelpModalOpen}
+      onClose={() => setIsHelpModalOpen(false)}
+    />
 
     {/* High Graphics Quality Confirmation Modal (Rendered outside header to escape pointer-events: none) */}
     {showHighQualityWarning && (
@@ -429,12 +479,12 @@ export const TopNav: React.FC<TopNavProps> = ({
               width: '40px',
               height: '40px',
               borderRadius: '10px',
-              background: 'rgba(234, 179, 8, 0.15)',
-              border: '1px solid rgba(234, 179, 8, 0.35)',
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#facc15',
+              color: '#ffffff',
               flexShrink: 0
             }}>
               <Sparkles size={22} />
@@ -452,7 +502,7 @@ export const TopNav: React.FC<TopNavProps> = ({
           <p style={{ fontSize: '13px', lineHeight: '1.55', color: '#cbd5e1', margin: '0 0 20px 0' }}>
             El modo de gráficos <strong>Alto</strong> activa sombras en tiempo real en resolución 2K, anti-aliasing completo y mayor fidelidad de renderizado.
             <br /><br />
-            <strong style={{ color: '#facc15' }}>Necesitas un buen dispositivo</strong> (PC con tarjeta gráfica dedicada o procesador potente) para visualizar la galería de forma fluida y sin caídas de fotogramas.
+            <strong style={{ color: '#ffffff' }}>Necesitas un buen dispositivo</strong> (PC con tarjeta gráfica dedicada o procesador potente) para visualizar la galería de forma fluida y sin caídas de fotogramas.
           </p>
 
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>

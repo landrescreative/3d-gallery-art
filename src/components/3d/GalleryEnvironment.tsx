@@ -23,7 +23,7 @@ const hdrTextureCache = new Map<string, THREE.DataTexture>()
  * Fully reactive to real-time debug controls: HDRI selection, rotation, intensity, blur, and exposure.
  */
 export const GalleryEnvironment: React.FC<GalleryEnvironmentProps> = ({
-  lightingMode = 'gallery',
+  lightingMode = 'dramatic',
   visualConfig,
   graphicsQuality = 'medio'
 }) => {

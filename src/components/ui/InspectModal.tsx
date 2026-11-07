@@ -9,7 +9,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Mail,
-  Film
+  Film,
+  Volume2
 } from 'lucide-react'
 import { Artwork, Sculpture } from '../../types/gallery'
 import { audioManager } from '../../utils/audio'
@@ -187,19 +188,20 @@ export const InspectModal: React.FC<InspectModalProps> = ({ item, onClose }) => 
                       position: 'absolute',
                       top: '12px',
                       left: '12px',
-                      background: 'rgba(14, 165, 233, 0.88)',
-                      backdropFilter: 'blur(8px)',
-                      padding: '4px 10px',
+                      background: 'rgba(0, 0, 0, 0.85)',
+                      backdropFilter: 'blur(10px)',
+                      padding: '5px 12px',
                       borderRadius: '20px',
-                      fontSize: '0.72rem',
+                      fontSize: '0.70rem',
                       fontWeight: 600,
                       color: '#ffffff',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '5px',
-                      border: '1px solid rgba(255, 255, 255, 0.3)',
+                      gap: '6px',
+                      border: '1px solid rgba(255, 255, 255, 0.25)',
                       pointerEvents: 'none',
-                      zIndex: 10
+                      zIndex: 10,
+                      letterSpacing: '0.06em'
                     }}
                   >
                     <Film size={12} />
@@ -306,7 +308,7 @@ export const InspectModal: React.FC<InspectModalProps> = ({ item, onClose }) => 
                       style={{
                         position: 'relative',
                         width: '52px', height: '52px', flexShrink: 0,
-                        border: idx === activeImageIdx ? '2px solid #38bdf8' : '2px solid rgba(255,255,255,0.15)',
+                        border: idx === activeImageIdx ? '2px solid #ffffff' : '1px solid rgba(255,255,255,0.18)',
                         borderRadius: '6px', overflow: 'hidden', padding: 0, cursor: 'pointer',
                         background: '#111111'
                       }}
@@ -317,11 +319,11 @@ export const InspectModal: React.FC<InspectModalProps> = ({ item, onClose }) => 
                         <div style={{
                           position: 'absolute',
                           inset: 0,
-                          background: 'rgba(0, 0, 0, 0.45)',
+                          background: 'rgba(0, 0, 0, 0.55)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          color: '#38bdf8'
+                          color: '#ffffff'
                         }}>
                           <Film size={16} />
                         </div>
@@ -359,12 +361,12 @@ export const InspectModal: React.FC<InspectModalProps> = ({ item, onClose }) => 
           {(item.dimensions || (artwork && artwork.techStack)) && (
             <div className="meta-specs-row" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', margin: '8px 0 14px 0', fontSize: '0.78rem' }}>
               {item.dimensions && (
-                <span style={{ background: 'rgba(255,255,255,0.06)', padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)', color: '#e2e8f0' }}>
+                <span style={{ background: 'rgba(255,255,255,0.06)', padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.14)', color: '#f1f5f9' }}>
                   📐 {item.dimensions}
                 </span>
               )}
               {artwork?.techStack && (
-                <span style={{ background: 'rgba(56,189,248,0.12)', color: '#38bdf8', padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(56,189,248,0.25)' }}>
+                <span style={{ background: 'rgba(255,255,255,0.1)', color: '#ffffff', padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.22)' }}>
                   ⚡ {artwork.techStack}
                 </span>
               )}
@@ -393,27 +395,26 @@ export const InspectModal: React.FC<InspectModalProps> = ({ item, onClose }) => 
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                background: artwork.url.includes('youtu') 
-                  ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.22), rgba(185, 28, 28, 0.28))'
-                  : 'linear-gradient(135deg, rgba(56, 189, 248, 0.16), rgba(99, 102, 241, 0.16))',
-                border: artwork.url.includes('youtu')
-                  ? '1px solid rgba(239, 68, 68, 0.55)'
-                  : '1px solid rgba(56, 189, 248, 0.45)',
-                color: '#ffffff',
+                background: '#ffffff',
+                border: '1px solid #ffffff',
+                color: '#000000',
                 textDecoration: 'none',
-                fontWeight: 600,
-                letterSpacing: '0.03em',
-                padding: '10px 18px',
+                fontWeight: 700,
+                letterSpacing: '0.04em',
+                fontSize: '0.78rem',
+                textTransform: 'uppercase',
+                padding: '11px 18px',
                 borderRadius: '8px',
                 width: '100%',
                 boxSizing: 'border-box',
                 marginBottom: '12px',
-                transition: 'all 0.2s ease'
+                transition: 'all 0.2s ease',
+                boxShadow: '0 4px 16px rgba(255, 255, 255, 0.15)'
               }}
               onClick={(e) => e.stopPropagation()}
             >
               <span>{artwork.url.includes('youtu') ? 'Ver Cortometraje en YouTube' : 'Visitar Proyecto Web en Vivo'}</span>
-              <ExternalLink size={16} />
+              <ExternalLink size={15} />
             </a>
           )}
 
@@ -445,20 +446,36 @@ export const InspectModal: React.FC<InspectModalProps> = ({ item, onClose }) => 
           </a>
 
           {/* Audio Guide Player Bar */}
-          <div className="audio-guide-box">
+          <div className={`audio-guide-box ${isPlayingAudio ? 'is-speaking' : ''}`}>
             <div className="guide-info">
+              <div className="guide-icon-disc">
+                <Volume2 size={16} />
+              </div>
               <div>
                 <strong>Audioguía del Museo</strong>
-                <span className="guide-sub">Escuchar narración del curador</span>
+                <span className="guide-sub">
+                  {isPlayingAudio ? 'Reproduciendo narración curatorial...' : 'Escuchar narración del curador'}
+                </span>
               </div>
             </div>
-            <button
-              className={`audio-play-btn ${isPlayingAudio ? 'playing' : ''}`}
-              onClick={toggleAudioGuide}
-              title={isPlayingAudio ? 'Detener Audioguía' : 'Reproducir Audioguía'}
-            >
-              {isPlayingAudio ? <Square size={16} /> : <Play size={16} style={{ marginLeft: 2 }} />}
-            </button>
+            <div className="audio-guide-actions">
+              {isPlayingAudio && (
+                <div className="guide-waveform" aria-hidden="true">
+                  <span className="wave-bar w1" />
+                  <span className="wave-bar w2" />
+                  <span className="wave-bar w3" />
+                  <span className="wave-bar w4" />
+                </div>
+              )}
+              <button
+                className={`audio-play-btn ${isPlayingAudio ? 'playing' : ''}`}
+                onClick={toggleAudioGuide}
+                title={isPlayingAudio ? 'Detener Audioguía' : 'Reproducir Audioguía'}
+                aria-label={isPlayingAudio ? 'Detener Audioguía' : 'Reproducir Audioguía'}
+              >
+                {isPlayingAudio ? <Square size={14} /> : <Play size={14} style={{ marginLeft: 2 }} />}
+              </button>
+            </div>
           </div>
 
           {/* Actions Footer */}

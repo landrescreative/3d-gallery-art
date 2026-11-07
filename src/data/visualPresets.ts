@@ -733,7 +733,7 @@ export const VISUAL_PRESETS: Record<string, VisualConfig> = {
 
 export const PRESETS_MAP: Record<string, VisualConfig> = VISUAL_PRESETS
 
-export const DEFAULT_VISUAL_CONFIG = USER_PREFERRED_CONFIG
+export const DEFAULT_VISUAL_CONFIG = PRESET_DRAMATICO
 
 export interface LightingModeMeta {
   id: LightingMode
@@ -747,6 +747,16 @@ export interface LightingModeMeta {
 }
 
 export const LIGHTING_MODES_INFO: LightingModeMeta[] = [
+  {
+    id: 'dramatic',
+    presetKey: 'dramatico',
+    label: 'Claroscuro Teatral',
+    shortLabel: 'Dramático',
+    subtitle: 'Alto contraste teatral · Enfoque en Obras',
+    description: 'Sombras profundas de claroscuro con iluminación focal directa sobre cada escultura y cuadro.',
+    hdriName: 'Noche Dikhololo 1K',
+    iconName: 'Eye'
+  },
   {
     id: 'gallery',
     presetKey: 'galeria',
@@ -816,16 +826,6 @@ export const LIGHTING_MODES_INFO: LightingModeMeta[] = [
     description: 'Luz suave desaturada con atmósfera brumosa, acabados mate y serenidad nórdica.',
     hdriName: 'Parque Escénico 2K',
     iconName: 'Cloud'
-  },
-  {
-    id: 'dramatic',
-    presetKey: 'dramatico',
-    label: 'Claroscuro Teatral',
-    shortLabel: 'Dramático',
-    subtitle: 'Alto contraste teatral · Enfoque en Obras',
-    description: 'Sombras profundas de claroscuro con iluminación focal directa sobre cada escultura y cuadro.',
-    hdriName: 'Noche Dikhololo 1K',
-    iconName: 'Eye'
   },
   {
     id: 'studio',

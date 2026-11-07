@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { ChevronDown, ChevronUp, Eye } from 'lucide-react'
 import { Artwork, Sculpture } from '../../types/gallery'
 import { useZoomState, zoomManager } from '../../utils/zoomState'
 
@@ -50,7 +51,7 @@ const RightClickMouseIcon: React.FC<{ size?: number; active?: boolean }> = ({
     {/* Right Click Button Quadrant - highlighted */}
     <path
       d="M12 2.5 H12 C15.866 2.5 18.5 5.134 18.5 9.5 H12 V2.5 Z"
-      fill={active ? '#38bdf8' : 'currentColor'}
+      fill={active ? '#ffffff' : 'currentColor'}
       fillOpacity={active ? 1.0 : 0.65}
     />
   </svg>
@@ -81,6 +82,7 @@ export const HUD: React.FC<HUDProps> = ({
     /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
   )
   const isZoomed = useZoomState()
+  const [isBadgeCollapsed, setIsBadgeCollapsed] = useState(false)
 
   return (
     <div className="hud-container">
@@ -93,10 +95,10 @@ export const HUD: React.FC<HUDProps> = ({
             bottom: '32px',
             left: '50%',
             transform: 'translateX(-50%)',
-            background: 'rgba(9, 9, 11, 0.90)',
+            background: 'rgba(9, 9, 11, 0.92)',
             backdropFilter: 'blur(16px)',
             WebkitBackdropFilter: 'blur(16px)',
-            border: '1px solid rgba(255, 255, 255, 0.14)',
+            border: '1px solid rgba(255, 255, 255, 0.16)',
             borderRadius: '14px',
             padding: '12px 24px',
             display: 'flex',
@@ -111,7 +113,7 @@ export const HUD: React.FC<HUDProps> = ({
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#38bdf8', fontWeight: 700 }}>
+            <span style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#ffffff', fontWeight: 700 }}>
               {'room' in currentTourItem && currentTourItem.room ? currentTourItem.room : 'Sala 3D, CGI & Escultura'}
             </span>
             <span style={{ fontSize: '10px', color: '#64748b' }}>•</span>
@@ -146,12 +148,35 @@ export const HUD: React.FC<HUDProps> = ({
         </div>
       )}
 
-      {/* Proximity Interaction Prompt Banner */}
+      {/* Proximity Interaction Prompt Luxury Museum Banner */}
       {nearestItem && !isTouring && !isInspecting && (
-        <div className="hud-prompt" onClick={() => onInspect(nearestItem)}>
-          <span className="prompt-action">Inspeccionar Obra</span>
-          <strong className="prompt-title">{nearestItem.title}</strong>
-          <span className="prompt-key">{isMobile ? 'TAP' : 'E'}</span>
+        <div
+          className="hud-proximity-card"
+          onClick={() => onInspect(nearestItem)}
+          role="button"
+          tabIndex={0}
+          title="Haz clic o presiona E para inspeccionar obra"
+        >
+          <div className="hud-proximity-glow" />
+          {nearestItem.imageUrl && (
+            <div className="hud-proximity-thumb">
+              <img src={nearestItem.imageUrl} alt={nearestItem.title} />
+            </div>
+          )}
+          <div className="hud-proximity-content">
+            <div className="hud-proximity-tag">
+              <span className="room-label">
+                {'room' in nearestItem && nearestItem.room ? nearestItem.room : 'Sala 3D, CGI & Escultura'}
+              </span>
+              {nearestItem.year && <span className="year-label">• {nearestItem.year}</span>}
+            </div>
+            <strong className="hud-proximity-title">{nearestItem.title}</strong>
+            <span className="hud-proximity-sub">{nearestItem.medium}</span>
+          </div>
+          <div className="hud-proximity-action">
+            <span className="hud-keycap">{isMobile ? 'TAP' : 'E'}</span>
+            <span className="hud-action-text">{isMobile ? 'Ver Obra' : 'Inspeccionar'}</span>
+          </div>
         </div>
       )}
 
@@ -171,8 +196,8 @@ export const HUD: React.FC<HUDProps> = ({
         </button>
       )}
 
-      {/* Pointer Lock Hint when cursor is free and not in tour mode or inspecting */}
-      {!isLocked && !isTouring && !isMobile && !isInspecting && (
+      {/* Pointer Lock Hint when cursor is free and not in tour mode or inspecting, hidden if nearestItem is active to avoid overlap */}
+      {!isLocked && !isTouring && !isMobile && !isInspecting && !nearestItem && (
         <div className="hud-lock-notice" onClick={onRequestPointerLock}>
           Haz click en la pantalla para explorar
         </div>
@@ -180,33 +205,52 @@ export const HUD: React.FC<HUDProps> = ({
 
       {/* Bottom-left Controls Badge */}
       {!isMobile && (
-        <div className="hud-controls-badge">
-          <div className="controls-row">
-            <span className="key-tag">WASD</span>
-            <span className="desc-text">Moverse</span>
+        <div className={`hud-controls-badge ${isBadgeCollapsed ? 'collapsed' : ''}`}>
+          <div className="controls-badge-header">
+            <span className="controls-badge-title">Controles</span>
+            <button
+              className="badge-toggle-btn"
+              onClick={() => setIsBadgeCollapsed((prev) => !prev)}
+              title={isBadgeCollapsed ? "Mostrar controles" : "Ocultar controles"}
+              aria-label="Alternar barra de controles"
+            >
+              {isBadgeCollapsed ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+            </button>
           </div>
-          <div className="controls-row">
-            <span className="key-tag">Shift</span>
-            <span className="desc-text">Correr</span>
-          </div>
-          <div className="controls-row">
-            <span className="key-tag">Mouse</span>
-            <span className="desc-text">Mirar</span>
-          </div>
-          <div className="controls-row">
-            <span className="key-tag" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-              <RightClickMouseIcon size={12} active={isZoomed} /> Click Der / Z
-            </span>
-            <span className="desc-text">Zoom 2×</span>
-          </div>
-          <div className="controls-row">
-            <span className="key-tag">E</span>
-            <span className="desc-text">Inspeccionar</span>
-          </div>
-          <div className="controls-row">
-            <span className="key-tag">ESC</span>
-            <span className="desc-text">Menu</span>
-          </div>
+          {!isBadgeCollapsed && (
+            <div className="controls-badge-grid">
+              <div className="controls-row">
+                <span className="key-tag">WASD</span>
+                <span className="desc-text">Moverse</span>
+              </div>
+              <div className="controls-row">
+                <span className="key-tag">Shift</span>
+                <span className="desc-text">Correr</span>
+              </div>
+              <div className="controls-row">
+                <span className="key-tag">Mouse</span>
+                <span className="desc-text">Mirar</span>
+              </div>
+              <div className="controls-row">
+                <span className="key-tag" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                  <RightClickMouseIcon size={12} active={isZoomed} /> Der / Z
+                </span>
+                <span className="desc-text">Zoom 2×</span>
+              </div>
+              <div className="controls-row">
+                <span className="key-tag key-highlight">E</span>
+                <span className="desc-text">Inspeccionar</span>
+              </div>
+              <div className="controls-row">
+                <span className="key-tag">H</span>
+                <span className="desc-text">Ayuda</span>
+              </div>
+              <div className="controls-row">
+                <span className="key-tag">ESC</span>
+                <span className="desc-text">Menú</span>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
